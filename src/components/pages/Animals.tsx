@@ -1,10 +1,12 @@
 import axios from "axios";
-import { useEffect, useLayoutEffect, useState } from "react"
+import { useEffect, useState } from "react"
+import { Link } from "react-router-dom";
 import { IAnimals } from "../interface/IAnimals";
 
 export const Animals = () => {
 
     const [animals, setAnimals] = useState<IAnimals[]>([]);
+    const [animals2, setAnimals2] = useState<IAnimals[]>([]);
     
     useEffect(() => {
         axios.get("https://animals.azurewebsites.net/api/animals")
@@ -12,19 +14,26 @@ export const Animals = () => {
             setAnimals(res.data);
         });
     }, []);
-    console.log(animals);
+   
 
-    localStorage.setItem("List of animals", JSON.stringify(animals));
+    localStorage.setItem("Animals", JSON.stringify(animals));
+
+    
+
+    
 
     return (
         <>
-        {animals.map((animal, index) => {
+        {animals.map((animal) => {
             return (
                 <>
-                <div key={index}>
+                <Link to={"/animal/" + animal.id}>
+                <div>
                     <h3>{animal.name}</h3>
+                    <p>{animal.shortDescription}</p>
                     {/* <img src={animal.imageUrl} alt={animal.name} /> */}
                 </div>
+                </Link>
                 </>
             )
         })}
