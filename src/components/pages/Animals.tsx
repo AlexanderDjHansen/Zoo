@@ -12,6 +12,7 @@ export const Animals = () => {
             setAnimals(res.data);
         });
     }, []);
+    console.log(animals);
 
     localStorage.setItem("List of animals", JSON.stringify(animals));
 
