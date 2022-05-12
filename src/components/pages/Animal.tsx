@@ -13,6 +13,7 @@ export const Animal = () => {
     let params = useParams()
     const [extendedAnimalInfo, setExtendedAnimalInfo] = useState<IExtendedAnimal>()
     const [disable, setDisable] = useState<boolean>(false)
+    const [countDown, setCountDown] = useState<number>(10)
     let timestamp = new Date().toLocaleString();
     let animalFromLS = JSON.parse(localStorage.getItem("Animals") || "[]");
     
@@ -21,27 +22,36 @@ export const Animal = () => {
         .then((response) => {
             setExtendedAnimalInfo(response.data)
         })
-    }, []);
+    },[animalFromLS] );
+
+    useEffect(() => {
+        countDown > 0 && setTimeout(() => {
+            setCountDown(countDown - 1)
+        }, 1000);
+    }, [countDown])
     
     function handleClick(){
         animalFromLS.map((animal: IExtendedAnimal) => {
         if (params.id === animal.id.toString() && animal.isFed === false){
             animal.isFed = true;
             animal.lastFed = timestamp;
+
             setTimeout(() => {
                 animal.isFed = false;
                 console.log(animal.isFed)
                 localStorage.setItem("Animals", JSON.stringify(animalFromLS));
             }, 10000);
-            console.log(timestamp);
+
             setDisable(true);
+            console.log(timestamp);            
             console.log(animal.isFed);
+            
             localStorage.setItem("Animals", JSON.stringify(animalFromLS));
                   } 
             }  
         )
     }
-
+    
     let animalInfoHTML = animalFromLS.map((animal: IExtendedAnimal) => {
         if (params.id === animal.id.toString() && animal.isFed === false) {
             return (
@@ -53,7 +63,7 @@ export const Animal = () => {
             else if (params.id === animal.id.toString() && animal.isFed === true){
                 return (
                     <div key={animal.id}>
-                    <p>I Am fed!</p>
+                    <p>I Am fed! You can feed me again in: {countDown} seconds</p>
                     <p>You fed me at: <StyledButton>{animal.lastFed}</StyledButton></p>
                     </div>
                     )

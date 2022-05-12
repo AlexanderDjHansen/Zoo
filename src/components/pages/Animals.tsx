@@ -11,7 +11,6 @@ export const Animals = () => {
         axios.get("https://animals.azurewebsites.net/api/animals/")
         .then((res) => {
             setAnimals(res.data);
-            console.log("I am")
         });
          }, []
     );
@@ -19,19 +18,21 @@ export const Animals = () => {
     if (animals === []){
     localStorage.setItem("Animals", JSON.stringify(animals));
      }
+
+  
     
-   let animalX = animals.map((animal) => {
+   let listOfAnimals = animals.map((animal) => {
         return (
-            <div key={animal.id}>
-                <Link to={"/animal/" + animal.id}><h3>{animal.name}</h3></Link>
+            <div key={animal.id}>   
+                <Link to={"/animal/" + animal.id}><h3>{animal.name}</h3></Link>    
                 <p>{animal.shortDescription}</p>
             </div>
-        )
-    });
+        )}
+    );
 
     return (
         <>
-        <div>{animalX}</div>
+        <div>{listOfAnimals}</div>
         </>
     )
 }
