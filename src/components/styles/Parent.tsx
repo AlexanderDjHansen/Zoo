@@ -6,31 +6,35 @@ export interface IStyledDivProps {
 }
 
 export const StyledDiv = styled.div`
-color: ${(props:IStyledDivProps) => props.color || "white"};
+color: ${(props:IStyledDivProps) => props.color || "black"};
 background-color: ${(props: IStyledDivProps) => props.background};
-
-margin: 1.5px;
-border-radius: 5px;
-border: 1px solid black;
+background-color: #0088ff42;
+width: 100%;
 display: flex;
 justify-content: center;
 align-items: center;
-gap: 2rem;
+
+list-style-type: none;
+padding: 2rem;
+gap: 4rem;
+a:link {
+    text-transform: uppercase;
+}
+
 
 a {
-    text-decoration: none; 
+    text-decoration: none;
 }
 
 a:hover {
-    color: green;
+    color: #171e17;
 }
 
 `
 
 export function Parent(){
     return (<>
-        <StyledDiv color="" background="blue">Hej</StyledDiv>
-        <StyledDiv color="" background="red">Då</StyledDiv>
+       
         </>
     )
 }
