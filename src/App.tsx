@@ -5,7 +5,7 @@ import { Animal } from './components/pages/Animal';
 import { Animals } from './components/pages/Animals';
 import { Home } from './components/pages/Home';
 import { Layout } from './components/pages/Layout';
-import { NotFound } from './components/pages/NotFound';
+
 
 
 function App() {
@@ -16,7 +16,6 @@ function App() {
           <Route index element={<Home/>}></Route>
           <Route path='/animals' element={<Animals/>}></Route>
           <Route path='/animal/:id' element={<Animal/>} ></Route>
-          <Route path='*' element={<NotFound/>}></Route>
         </Route>
       </Routes>
     </BrowserRouter>

@@ -1,89 +1,140 @@
-
-import axios from "axios";
-
-import {  useEffect, useState } from "react";
-import {  useParams } from "react-router-dom"
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import { IExtendedAnimal } from "../interface/IExtendedAnimal";
 import { StyledButton } from "../styles/StyledButton";
+import { StyledDivAlignItems } from "../styles/StyledDivAlignItems";
+import { StyledDivInformation } from "../styles/StyledDivInformation";
+import { StyledPWhenFeeded } from "../styles/StyledPWhenFeeded";
+import { StyledSection } from "../styles/StyledSection";
 
-import "./../styles/Layout.css"
-
+import "./../styles/Layout.css";
 
 export const Animal = () => {
-    let params = useParams()
-    const [extendedAnimalInfo, setExtendedAnimalInfo] = useState<IExtendedAnimal>()
-    const [disable, setDisable] = useState<boolean>(false)
-    const [countDown, setCountDown] = useState<number>(10)
-    let timestamp = new Date().toLocaleString();
-    let animalFromLS = JSON.parse(localStorage.getItem("Animals") || "[]");
-    
-    useEffect(() => {
-        axios.get("https://animals.azurewebsites.net/api/animals/" + params.id)
-        .then((response) => {
-            setExtendedAnimalInfo(response.data)
-        })
-    },[animalFromLS] );
+  let params = useParams();
 
-    useEffect(() => {
-        countDown > 0 && setTimeout(() => {
-            setCountDown(countDown - 1)
-        }, 1000);
-    }, [countDown])
-    
-    function handleClick(){
-        animalFromLS.map((animal: IExtendedAnimal) => {
-        if (params.id === animal.id.toString() && animal.isFed === false){
-            animal.isFed = true;
-            animal.lastFed = timestamp;
-
-            setTimeout(() => {
-                animal.isFed = false;
-                console.log(animal.isFed)
-                localStorage.setItem("Animals", JSON.stringify(animalFromLS));
-            }, 10000);
-
-            setDisable(true);
-            console.log(timestamp);            
-            console.log(animal.isFed);
-            
-            localStorage.setItem("Animals", JSON.stringify(animalFromLS));
-                  } 
-            }  
-        )
+  const [extendedAnimalInfo, setExtendedAnimalInfo] = useState<IExtendedAnimal>(
+    {
+      id: 0,
+      name: "",
+      latinName: "",
+      yearOfBirth: 0,
+      shortDescription: "",
+      longDescription: "",
+      imageUrl: "",
+      medicine: "",
+      isFed: false,
+      lastFed: "",
     }
-    
-    let animalInfoHTML = animalFromLS.map((animal: IExtendedAnimal) => {
-        if (params.id === animal.id.toString() && animal.isFed === false) {
-            return (
-                    <StyledButton key={animal.id} disabled={disable} onClick={() => {
-                        handleClick();
-                        }}>Feed me!</StyledButton>          
-                    )
-                } 
-            else if (params.id === animal.id.toString() && animal.isFed === true){
-                return (
-                    <div key={animal.id}>
-                    <p>I Am fed! You can feed me again in: {countDown} seconds</p>
-                    <p>You fed me at: <StyledButton>{animal.lastFed}</StyledButton></p>
-                    </div>
-                    )
-            }
-        })
-    return (
-            <>      
-                <section>
-                    <div>
-                        <h3>{extendedAnimalInfo?.name}</h3>
-                        <p>{extendedAnimalInfo?.longDescription}</p>
-                    </div>
-                </section>
-                <span>
-                    <img src={extendedAnimalInfo?.imageUrl} alt={extendedAnimalInfo?.name} />
-                </span>
-                <div>{animalInfoHTML}</div>
-              
-           
-            
+  );
+
+  let timestamp = Date();
+
+  useEffect(() => {
+    let animalFromLS: IExtendedAnimal[] = JSON.parse(
+      localStorage.getItem("Animals") || "[]"
+    );
+    animalFromLS.map((animal) => {
+      if (params.id == animal.id.toString()) {
+        setExtendedAnimalInfo(animal);
+      }
+    });
+  }, []);
+
+  function caluclateFeeding() {
+    let dateParse = Date.parse(Date());
+    if (
+      dateParse - Date.parse(extendedAnimalInfo.lastFed) >
+      1000 * 60 * 60 * 3
+    ) {
+      return true;
+    }
+    return false;
+  }
+  function setToFalse() {
+    let animalFromLS: IExtendedAnimal[] = JSON.parse(
+      localStorage.getItem("Animals") || "[]"
+    );
+    animalFromLS.map((animal, i) => {
+      if (params.id == animal.id.toString()) {
+        animalFromLS[i] = {
+          ...extendedAnimalInfo,
+          isFed: false,
+          lastFed: timestamp,
+        };
+      }
+    });
+    localStorage.setItem("Animals", JSON.stringify(animalFromLS));
+    setExtendedAnimalInfo({
+      ...extendedAnimalInfo,
+      isFed: false,
+    });
+  }
+
+  function handleClick() {
+    let animalFromLS: IExtendedAnimal[] = JSON.parse(
+      localStorage.getItem("Animals") || "[]"
+    );
+    animalFromLS.map((animal, i) => {
+      if (params.id == animal.id.toString()) {
+        animalFromLS[i] = {
+          ...extendedAnimalInfo,
+          isFed: true,
+          lastFed: timestamp,
+        };
+      }
+    });
+    localStorage.setItem("Animals", JSON.stringify(animalFromLS));
+    setExtendedAnimalInfo({
+      ...extendedAnimalInfo,
+      isFed: true,
+      lastFed: timestamp,
+    });
+    setTimeout(() => {
+      setToFalse();
+    }, 1000 * 60 * 60 * 3);
+  }
+
+  let animalHtml =
+    !extendedAnimalInfo.isFed || caluclateFeeding() ? (
+      <StyledButton
+        key={extendedAnimalInfo.id}
+        onClick={() => {
+          handleClick();
+        }}
+      >
+        Feed me!
+      </StyledButton>
+    ) : (
+      <div key={extendedAnimalInfo.id}>
+        <p>I Am fed!</p>
+        <p>
+          You fed me at:{" "}
+          <StyledPWhenFeeded>{extendedAnimalInfo.lastFed}</StyledPWhenFeeded>
+          Come back and feed me in 3 hours
+        </p>
+      </div>
+    );
+
+  return (
+    <>
+      <StyledSection>
+        <div>
+          <h3>{extendedAnimalInfo?.name}</h3>
+          <p>{extendedAnimalInfo?.longDescription}</p>
+        </div>
+      </StyledSection>
+      <StyledSection>
+        <img
+          src={extendedAnimalInfo?.imageUrl}
+          alt={extendedAnimalInfo?.name}
+        />
+       <StyledDivInformation>
+           <p>Latin name: {extendedAnimalInfo.latinName}</p>
+           <p>Year of birth: {extendedAnimalInfo.yearOfBirth}</p>
+           <p>Medicin: {extendedAnimalInfo.medicine}</p>
+       </StyledDivInformation>
+      </StyledSection>
+      <StyledDivAlignItems>{animalHtml}</StyledDivAlignItems>
     </>
-    )
-}
+  );
+};

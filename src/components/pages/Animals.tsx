@@ -1,38 +1,58 @@
-
 import axios from "axios";
-import { useEffect, useState } from "react"
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { IAnimals } from "../interface/IAnimals";
+import { StyledDivAnimalList } from "../styles/StyledDivAnimalList";
+import { StyledDivNeedsFeeding } from "../styles/StyledDivNeedsFeeding";
+import { StyledDivForLinks } from "../styles/StyledDivForLink";
+import { StyledP } from "../styles/StyledP";
 
 export const Animals = () => {
-    const [animals, setAnimals] = useState<IAnimals[]>([]);
-   
-    useEffect(() => {  
-        axios.get("https://animals.azurewebsites.net/api/animals/")
+  const [animals, setAnimals] = useState<IAnimals[]>([]);
+
+  useEffect(() => {
+    if (localStorage.getItem("Animals")) {
+      setAnimals(JSON.parse(localStorage.getItem("Animals") || "[]"));
+    } else {
+      axios
+        .get("https://animals.azurewebsites.net/api/animals/")
         .then((res) => {
-            setAnimals(res.data);
+          localStorage.setItem("Animals", JSON.stringify(res.data));
+          setAnimals(res.data);
         });
-         }, []
-    );
- 
-    if (animals === []){
-    localStorage.setItem("Animals", JSON.stringify(animals));
-     }
+    }
+  }, []);
 
-  
-    
-   let listOfAnimals = animals.map((animal) => {
-        return (
-            <div key={animal.id}>   
-                <Link to={"/animal/" + animal.id}><h3>{animal.name}</h3></Link>    
-                <p>{animal.shortDescription}</p>
-            </div>
-        )}
-    );
+  let listOfAnimals = animals.map((animal) => {
+    if (Date.parse(Date()) - Date.parse(animal.lastFed) > 1000 * 60 * 60 * 4) {
+      return (
+        <div key={animal.id}>
+          <StyledDivNeedsFeeding>
+            <Link to={"/animal/" + animal.id}>
+              <h2>{animal.name} </h2>
+            </Link>
+          </StyledDivNeedsFeeding>
+          <StyledP>was last fed 4 or more hours ago. Go and feed the animal!</StyledP>
+          <p>{animal.shortDescription}</p>
+        </div>
+      );
+    } else {
+      return (
+        <div key={animal.id}>
+          <StyledDivForLinks>
+          <Link to={"/animal/" + animal.id}>
+            <h3>{animal.name}</h3>
+          </Link>
+          </StyledDivForLinks>
+          <p>{animal.shortDescription}</p>
+        </div>
+      );
+    }
+  });
 
-    return (
-        <>
-        <div>{listOfAnimals}</div>
-        </>
-    )
-}
+  return (
+    <>
+      <StyledDivAnimalList>{listOfAnimals}</StyledDivAnimalList>
+    </>
+  );
+};
