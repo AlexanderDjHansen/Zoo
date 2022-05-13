@@ -107,11 +107,11 @@ export const Animal = () => {
     ) : (
       <div key={extendedAnimalInfo.id}>
         <p>I Am fed!</p>
-        <p>
+        <span>
           You fed me at:{" "}
           <StyledPWhenFeeded>{extendedAnimalInfo.lastFed}</StyledPWhenFeeded>
           Come back and feed me in 3 hours
-        </p>
+        </span>
       </div>
     );
 
@@ -128,11 +128,11 @@ export const Animal = () => {
           src={extendedAnimalInfo?.imageUrl}
           alt={extendedAnimalInfo?.name}
         />
-       <StyledDivInformation>
-           <p>Latin name: {extendedAnimalInfo.latinName}</p>
-           <p>Year of birth: {extendedAnimalInfo.yearOfBirth}</p>
-           <p>Medicin: {extendedAnimalInfo.medicine}</p>
-       </StyledDivInformation>
+        <StyledDivInformation>
+          <p>Latin name: {extendedAnimalInfo.latinName}</p>
+          <p>Year of birth: {extendedAnimalInfo.yearOfBirth}</p>
+          <p>Medicin: {extendedAnimalInfo.medicine}</p>
+        </StyledDivInformation>
       </StyledSection>
       <StyledDivAlignItems>{animalHtml}</StyledDivAlignItems>
     </>

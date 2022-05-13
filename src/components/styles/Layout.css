@@ -8,50 +8,22 @@ body {
   color: rgb(19, 7, 67);
 }
 
-div div h3 {
-    justify-content: center;
-    align-items: center;
-    display: flex;
-}
-h1, h3 {
+h1,
+h2,
+h3 {
   display: flex;
   justify-content: center;
   font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 
-h3{
-    text-decoration: none;
-}
-
-main {
-  width: 100%;
-}
-
 nav li {
   padding: 1rem;
-  border-radius: 5%;
+  border-radius: 1rem;
   background-color: rgb(68, 255, 0);
 }
 
-ul {
-  list-style: none;
-}
-
-div {
-  justify-content: center;
-  align-items: center;
-  /*  margin: 2rem */
-}
-
-section div {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  /* margin: 1rem */
-}
-
 div img {
+  border: 4px solid white;
   width: 25rem;
   display: flex;
   justify-content: center;

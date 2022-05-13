@@ -1,7 +1,6 @@
 import styled from "styled-components";
 
 export const StyledUl = styled.div`
-  
   width: 100%;
   display: flex;
   justify-content: center;
@@ -12,7 +11,6 @@ export const StyledUl = styled.div`
 
   a:link {
     text-transform: uppercase;
-    
   }
   a {
     text-decoration: none;

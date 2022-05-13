@@ -35,12 +35,16 @@ export const Home = () => {
   return (
     <>
       <h1>Welcome to the ZOO</h1>
-      <h3>Here you can interact with the animals, feed them and learn more about their personalities</h3>
+      <h3>
+        Here you can interact with the animals, feed them and learn more about
+        their personalities
+      </h3>
       <StyledSection>
         <aside>
-      <StyledDivHungryAnimals>{animalsThatNeedsFeeding}</StyledDivHungryAnimals>
-      </aside>
-    
+          <StyledDivHungryAnimals>
+            {animalsThatNeedsFeeding}
+          </StyledDivHungryAnimals>
+        </aside>
       </StyledSection>
     </>
   );

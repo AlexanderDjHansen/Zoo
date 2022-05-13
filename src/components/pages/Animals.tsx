@@ -6,6 +6,8 @@ import { StyledDivAnimalList } from "../styles/StyledDivAnimalList";
 import { StyledDivNeedsFeeding } from "../styles/StyledDivNeedsFeeding";
 import { StyledDivForLinks } from "../styles/StyledDivForLink";
 import { StyledP } from "../styles/StyledP";
+import { StyledDivContainer } from "../styles/StyledDivContainer";
+import { Styledh3 } from "../styles/Styledh3";
 
 export const Animals = () => {
   const [animals, setAnimals] = useState<IAnimals[]>([]);
@@ -26,26 +28,28 @@ export const Animals = () => {
   let listOfAnimals = animals.map((animal) => {
     if (Date.parse(Date()) - Date.parse(animal.lastFed) > 1000 * 60 * 60 * 4) {
       return (
-        <div key={animal.id}>
+        <StyledDivContainer key={animal.id}>
           <StyledDivNeedsFeeding>
             <Link to={"/animal/" + animal.id}>
-              <h2>{animal.name} </h2>
+              <Styledh3>{animal.name} </Styledh3>
             </Link>
           </StyledDivNeedsFeeding>
-          <StyledP>was last fed 4 or more hours ago. Go and feed the animal!</StyledP>
+          <StyledP>
+            was last fed 4 or more hours ago. Go and feed the animal!
+          </StyledP>
           <p>{animal.shortDescription}</p>
-        </div>
+        </StyledDivContainer>
       );
     } else {
       return (
-        <div key={animal.id}>
+        <StyledDivContainer key={animal.id}>
           <StyledDivForLinks>
-          <Link to={"/animal/" + animal.id}>
-            <h3>{animal.name}</h3>
-          </Link>
+            <Link to={"/animal/" + animal.id}>
+              <Styledh3>{animal.name}</Styledh3>
+            </Link>
           </StyledDivForLinks>
           <p>{animal.shortDescription}</p>
-        </div>
+        </StyledDivContainer>
       );
     }
   });

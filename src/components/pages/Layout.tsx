@@ -7,14 +7,14 @@ export const Layout = () => {
   return (
     <>
       <nav>
-          <StyledUl>
-            <li>
-              <Link to="/">Home</Link>
-            </li>
-            <li>
-              <Link to="/animals">Animals</Link>
-            </li>
-          </StyledUl>
+        <StyledUl>
+          <li>
+            <Link to="/">Home</Link>
+          </li>
+          <li>
+            <Link to="/animals">Animals</Link>
+          </li>
+        </StyledUl>
       </nav>
       <Outlet></Outlet>
     </>
